@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">Project Login</string>
+    <string name="efetue_seu_login">Efetue seu login</string>
+    <string name="login">Login</string>
+    <string name="password">Senha</string>
+    <string name="bem_vindo_a_tela_inicial">Bem vindo a tela inicial</string>
 </resources>
