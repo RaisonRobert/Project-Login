@@ -38,7 +38,12 @@ class LoginFragment : Fragment() {
 
     private fun setupLayoutClick() {
         binding.txtCreateAcountLogin.setOnClickListener {
-            //TODO
+            email = binding.fieldUserNameLogin.text.toString().trim()
+            password = binding.fieldPasswordLogin.text.toString().trim()
+            lifecycleScope.launch {
+                showProgressDialog(requireContext(),"Carregando ...")
+                mViewModel.verifyLoginCreateAcount(email, password)
+            }
         }
         binding.btnLogin.setOnClickListener {
             showProgressDialog(requireContext(), "Aguarde...")
@@ -62,7 +67,9 @@ class LoginFragment : Fragment() {
         mViewModel.verifyLoginSuccess.observe(viewLifecycleOwner) { login ->
             login?.let {
                 dismissProgressDialog()
-                findNavController().navigate(R.id.action_login_to_home).takeIf { login }
+                if(login){
+                    findNavController().navigate(R.id.action_login_to_home)
+                }
             }
         }
     }

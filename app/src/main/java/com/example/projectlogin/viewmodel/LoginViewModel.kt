@@ -17,13 +17,34 @@ class LoginViewModel @Inject constructor(private val repository: DataBaseReposit
         toastMensage.value = null
         verifyLoginSuccess.value = null
     }
+    suspend fun verifyLoginCreateAcount(email: String, password: String) {
+        val result = when {
+            email.isEmpty() -> DataBaseResult.Error("Digite o email")
+            email.isInvalidEmail() -> DataBaseResult.Error("Email inválido")
+            password.isEmpty() -> DataBaseResult.Error("Digite a senha")
+            else -> repository.save(email, password)
+        }
 
+        when (result) {
+            is DataBaseResult.Success -> {
+                // Operação de busca bem-sucedida
+                // Exibir uma mensagem de sucesso, navegar para outra tela, etc.
+                verifyLoginSuccess.value = true
+            }
+
+            is DataBaseResult.Error -> {
+                // Operação de busca falhou
+                toastMensage("${result.message}")
+                verifyLoginSuccess.value = false
+            }
+        }
+    }
     suspend fun verifyLogin(email: String, password: String) {
         val result = when {
             email.isEmpty() -> DataBaseResult.Error("Digite o email")
             email.isInvalidEmail() -> DataBaseResult.Error("Email inválido")
             password.isEmpty() -> DataBaseResult.Error("Digite a senha")
-            else -> DataBaseResult.Success
+            else -> repository.getEmail(email, password)//buscar no repository
         }
 
         when (result) {
